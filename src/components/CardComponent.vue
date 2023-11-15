@@ -1,67 +1,65 @@
 <template>
-   
-   <div class="flip-card">
-  <div class="flip-card-inner">
-    <div class="flip-card-front">
-          <div class="card bg-transparent text-light border-0 " >
-            <img :src="img" class="card-img-top" alt="img">
-          </div>
-        </div> 
-          <div class="flip-card-back p-3">
-              <p class="card-text">Titolo: {{ title }}</p> 
-              <p>Titolo originale:{{ original_title }}</p>
-              <!-- <p>{{ original_language }}</p> -->
-              <img :src="original_language_img" alt="img" class="py-3">
-              <p>voto: {{ vote_average }}</p>
-              <!-- <div v-for="(i) in 5" :key="i">
-            <i class="fas" :class="{'fa-star': i <= vote_star, 'fa-star-o': i >vote_star}"></i>
-  </div> -->
-  
-            </div>
-          
+  <div class="flip-card">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <div class="card bg-transparent text-light border-0">
+          <img :src="img" class="card-img-top" alt="img" />
         </div>
-</div>
-         
+      </div>
+      <div class="flip-card-back p-3">
+        <p class="card-text">Titolo: {{ title }}</p>
+        <p>Titolo originale:{{ original_title }}</p>
+        <!-- <p>{{ original_language }}</p> -->
+        <img :src="original_language_img" alt="img" class="py-3" />
+        <p>voto: {{ vote_average }}</p>
+        <div class="d-flex flex-row">
+          <div v-for="i in 5" :key="i">
+            <i
+              :class="[
+                { 'fa-regular': i > vote_star, 'fa-solid': i <= vote_star },
+                'fa fa-star',
+              ]"
+              class="fa-star"
+            ></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        name:'CardComponent',
-        props:{
-            title:String,
-            img:String,
-            original_title:String,
-            original_language:String,
-            vote_average:Number,
-            original_language_img:String,
-            vote_star:Number,
-           
-        },
-        data(){
-            return{
-
-            }
-        }
-        
-    }
+export default {
+  name: "CardComponent",
+  props: {
+    title: String,
+    img: String,
+    original_title: String,
+    original_language: String,
+    vote_average: Number,
+    original_language_img: String,
+    vote_star: Number,
+  },
+  data() {
+    return {};
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-.card{
+.card {
   cursor: pointer;
   transition: 1s;
-  .card-img-top{
+  .card-img-top {
     height: 65vh;
   }
-
- 
 }
-.card-title{
+.card-title {
   font-size: 1em;
 }
 
 .flip-card {
-  background-color:transparent;
+  background-color: transparent;
   height: 70vh;
   perspective: 1000px;
 }
@@ -79,7 +77,8 @@
   transform: rotateY(180deg);
 }
 
-.flip-card-front, .flip-card-back {
+.flip-card-front,
+.flip-card-back {
   position: absolute;
   width: 100%;
   height: 93%;
@@ -88,11 +87,11 @@
 }
 
 .flip-card-front {
-  background-color:transparent;
+  background-color: transparent;
 }
 
 .flip-card-back {
-  background-color:rgba(0, 0, 0, 0.486);
+  background-color: rgba(0, 0, 0, 0.486);
   box-shadow: 0px 0px 8px 0px black;
   color: white;
   transform: rotateY(180deg);
@@ -102,10 +101,8 @@
   align-content: center;
   justify-content: center;
   text-align: left;
-  p{
+  p {
     padding: 5px;
   }
 }
-
-
 </style>

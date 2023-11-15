@@ -18,6 +18,7 @@
             :original_language="movie.original_language"
             :original_language_img="'/flags/'+ movie.original_language +'.png'"
             :vote_average="movie.vote_average"
+            :vote_star="Math.ceil(movie.vote_average / 2)"
           />
         </div>
       </div>
@@ -38,7 +39,7 @@
             :original_language="series.original_language"
             :original_language_img="'/flags/'+ series.original_language +'.png'"
             :vote_average="series.vote_average"
-            :vote_star="Math.ceil(this.movie.vote_average / 2)"
+            :vote_star="Math.ceil(series.vote_average / 2)"
           />
         </div>
       </div>
