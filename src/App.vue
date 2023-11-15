@@ -16,6 +16,7 @@
             :title="movie.title"
             :original_title="movie.original_title"
             :original_language="movie.original_language"
+            :original_language_img="'/flags/'+ movie.original_language +'.png'"
             :vote_average="movie.vote_average"
           />
         </div>
@@ -35,6 +36,7 @@
             :title="series.name"
             :original_title="series.original_name"
             :original_language="series.original_language"
+            :original_language_img="'/flags/'+ series.original_language +'.png'"
             :vote_average="series.vote_average"
           />
         </div>
