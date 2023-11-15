@@ -16,6 +16,7 @@
               <!-- <div v-for="(i) in 5" :key="i">
             <i class="fas" :class="{'fa-star': i <= vote_star, 'fa-star-o': i >vote_star}"></i>
   </div> -->
+  
             </div>
           
         </div>
