@@ -1,7 +1,10 @@
 <template>
-  <div>
-
-  </div>
+ <header>
+  header
+ </header>
+ <main>
+  main
+ </main>
 </template>
 
 <script>
