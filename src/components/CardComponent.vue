@@ -13,6 +13,9 @@
               <!-- <p>{{ original_language }}</p> -->
               <img :src="original_language_img" alt="img" class="py-3">
               <p>voto: {{ vote_average }}</p>
+              <!-- <div v-for="(i) in 5" :key="i">
+            <i class="fas" :class="{'fa-star': i <= vote_star, 'fa-star-o': i >vote_star}"></i>
+  </div> -->
             </div>
           
         </div>
@@ -30,6 +33,7 @@
             original_language:String,
             vote_average:Number,
             original_language_img:String,
+            vote_star:Number,
            
         },
         data(){

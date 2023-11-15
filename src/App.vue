@@ -38,6 +38,7 @@
             :original_language="series.original_language"
             :original_language_img="'/flags/'+ series.original_language +'.png'"
             :vote_average="series.vote_average"
+            :vote_star="Math.ceil(this.movie.vote_average / 2)"
           />
         </div>
       </div>
@@ -100,6 +101,7 @@ export default {
   created() {
     this.getMoviesAndSeries();
   },
+  
 };
 </script>
 
