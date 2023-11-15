@@ -1,15 +1,15 @@
 <template>
     <header>
-  <nav class="navbar">
-  <div class="container-fluid">
-    <a class="navbar-brand">Boolflix</a>
-    <form class="d-flex" role="search">
-      <input class="form-control me-2" type="search" placeholder="Cerca film o serire Tv" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Cerca</button>
-    </form>
-  </div>
-</nav>
- </header>
+    <nav class="navbar">
+      <div class="container-fluid">
+        <a class="navbar-brand">Boolflix</a>
+        <form class="d-flex" @submit.prevent="submitSearch">
+          <input class="form-control me-2" type="search" placeholder="Cerca film o serie TV" aria-label="Search" v-model="search">
+          <button class="btn btn-outline-success" type="submit">Cerca</button>
+        </form>
+      </div>
+    </nav>
+  </header>
 </template>
 
 <script>
@@ -17,9 +17,14 @@
         name:'HeaderComponent',
         data(){
             return{
-
+                search:'',
             }
-        }
+        },
+        methods: {
+    submitSearch() {
+      this.$emit('search-submitted', this.search);
+    },
+  },
     }
 </script>
 

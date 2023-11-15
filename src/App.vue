@@ -1,12 +1,14 @@
 <template>
-  <HeaderComponent />
+  <HeaderComponent 
+  @search-submitted="submitSearch"
+  />
   <main>
     <section id="movie" class="container">
       <h2>film</h2>
       <div class="row">
         <div
           class="col-12 col-md-4 col-lg-3"
-          v-for="(movie, index) in store.movieList"
+          v-for="(movie, index) in filterMovies()"
           :key="movie.id"
         >
           <CardComponent
@@ -25,7 +27,7 @@
       <div class="row">
         <div
           class="col-12 col-md-4 col-lg-3"
-          v-for="(series, index) in store.serieList"
+          v-for="(series, index) in filterSeries()"
           :key="series.id"
         >
           <CardComponent
@@ -56,6 +58,7 @@ export default {
   data() {
     return {
       store,
+      search:''
     };
   },
   methods: {
@@ -73,6 +76,24 @@ export default {
         this.store.serieList = res.data.results;
       });
     },
+    submitSearch(newSearch){
+      this.search = newSearch;
+      this.filterMovies();
+      this.filterSeries();
+    },
+    filterMovies() {
+      const searchMandS = this.search.toLowerCase();
+      return this.store.movieList.filter((movie) => {
+        return movie.title.toLowerCase().includes(searchMandS);
+      });
+    },
+    filterSeries() {
+      const searchMandS = this.search.toLowerCase();
+      return this.store.serieList.filter((serie) => {
+        return serie.name.toLowerCase().includes(searchMandS);
+      });
+    },
+   
   },
   created() {
     this.getMoviesAndSeries();
