@@ -10,7 +10,7 @@
         <p class="card-text">Titolo: {{ title }}</p>
         <p>Titolo originale:{{ original_title }}</p>
         <!-- <p>{{ original_language }}</p> -->
-        <img :src="original_language_img" alt="img" class="py-3" />
+        <img :src="original_language_img" alt="img" />
         <p>voto: {{ vote_average }}</p>
         <div class="d-flex flex-row">
           <div v-for="i in 5" :key="i">
@@ -51,16 +51,13 @@ export default {
   cursor: pointer;
   transition: 1s;
   .card-img-top {
-    height: 65vh;
+    height: 40vh;
   }
-}
-.card-title {
-  font-size: 1em;
 }
 
 .flip-card {
   background-color: transparent;
-  height: 70vh;
+  height: 43vh;
   perspective: 1000px;
 }
 
@@ -101,8 +98,6 @@ export default {
   align-content: center;
   justify-content: center;
   text-align: left;
-  p {
-    padding: 5px;
-  }
+ font-size: small;
 }
 </style>

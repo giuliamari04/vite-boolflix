@@ -4,10 +4,10 @@
   />
   <main>
     <section id="movie" class="container">
-      <h2>film</h2>
-      <div class="row">
+      <h2>Movie</h2>
+      <div class="row flex-nowrap  overflow-x-scroll overflow-y-hidden">
         <div
-          class="col-12 col-md-4 col-lg-3"
+          class="col-12 col-md-4 col-lg-2"
           v-for="(movie, index) in filterMovies()"
           :key="movie.id"
         >
@@ -25,10 +25,10 @@
     </section>
 
     <section id="serie" class="container">
-      <h2>serie</h2>
-      <div class="row">
+      <h2>Series</h2>
+      <div class="row flex-nowrap  overflow-x-scroll overflow-y-hidden ">
         <div
-          class="col-12 col-md-4 col-lg-3"
+          class="col-12 col-md-4 col-lg-2"
           v-for="(series, index) in filterSeries()"
           :key="series.id"
         >
