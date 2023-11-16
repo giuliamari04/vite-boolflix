@@ -1,22 +1,28 @@
 <template>
+  <!-- pagina splash iniziale-->
   <div v-if="showSplash" class="splash overflow-hidden ">
     <img src="/public/image/netflix_newlogoanimation.gif" alt="gif">
   </div>
+  <!-- header con navbar -->
   <HeaderComponent @search-submitted="submitSearch" />
+
+
   <main>
-    <div
-      class="my-vh front"
-      :class="{ 'd-none': search !== '', 'd-block': search === '' }"
-    >
+    <!-- div iniziale apertura sito -->
+    <div class="my-vh front" :class="{ 'd-none': search !== '', 'd-block': search === '' }">
       <h2>Cerca un film o una serie Tv nella barra di ricerca</h2>
     </div>
+
+    <!-- loader caricamenti Film e Serie -->
     <LoaderComponent v-if="loading" />
-    <div
-      v-if="!loading"
-      :class="{ 'd-none': search === '', 'd-block': search !== '' }"
-    >
+
+    <!-- div lista serie e movie -->
+    <div v-if="!loading" :class="{ 'd-none': search === '', 'd-block': search !== '' }">
+
+      <!-- SECTION 1 || MOVIE -->
       <section id="movie" class="container">
         <h2>Movie</h2>
+        <!-- button slider card precedente -->
         <button
           class="btn prev-btn"
           @click="scrollMovies(-1)"
@@ -24,11 +30,12 @@
         >
           <i class="fa-solid fa-chevron-right fa-rotate-180"></i>
         </button>
+
+        <!-- div row lista movie -->
         <div class="row overflow-hidden flex-nowrap">
-          <div
-            class="movie-list"
-            :style="{ transform: `translateX(${translateXMovie}px)` }"
-          >
+          <div class="movie-list" :style="{ transform: `translateX(${translateXMovie}px)` }">
+
+            <!-- ciclo for che stampa singole card -->
             <div
               class="col-12 col-md-4 col-lg-2 px-1"
               v-for="(movie, index) in filterMovies()"
@@ -52,6 +59,7 @@
             </div>
           </div>
         </div>
+        <!-- button slider card successiva -->
         <button
           class="btn next-btn"
           @click="scrollMovies(1)"
@@ -60,9 +68,11 @@
           <i class="fa-solid fa-chevron-right"></i>
         </button>
       </section>
-
+      <!-- SECTION 2 || SERIES -->
       <section id="serie" class="container">
         <h2>Series</h2>
+
+        <!-- button slider card precedente -->
         <button
           class="btn prev-btn"
           @click="scrollSeries(-1)"
@@ -70,11 +80,11 @@
         >
           <i class="fa-solid fa-chevron-right fa-rotate-180"></i>
         </button>
+
+        <!-- div row lista serie -->
         <div class="row overflow-hidden flex-nowrap">
-          <div
-            class="movie-list"
-            :style="{ transform: `translateX(${translateXSeries}px)` }"
-          >
+          <div class="movie-list" :style="{ transform: `translateX(${translateXSeries}px)` }">
+           <!-- ciclo for che stampa singole card -->
             <div
               class="col-12 col-md-4 col-lg-2 px-1"
               v-for="(series, index) in filterSeries()"
@@ -97,6 +107,7 @@
             </div>
           </div>
         </div>
+          <!-- button slider card successiva -->
         <button
           class="btn next-btn"
           @click="scrollSeries(1)"
@@ -127,7 +138,6 @@ export default {
     return {
       store,
       search: "",
-      currentPage: 0,
       currentPageMovie: 0,
       currentPageSeries: 0,
       elementsPerPage: 6,
@@ -136,22 +146,28 @@ export default {
     };
   },
   computed: {
+    //porzione di un elenco di film in base alla pagina corrente e al numero di elementi da visualizzare per pagina
     visibleMovies() {
       const start = this.currentPage * this.elementsPerPage;
       const end = start + this.elementsPerPage;
       return this.filterMovies().slice(start, end);
     },
+    //porzione di un elenco di serie in base alla pagina corrente e al numero di elementi da visualizzare per pagina
     visibleseries() {
       const start = this.currentPage * this.elementsPerPage;
       const end = start + this.elementsPerPage;
       return this.filterSeries().slice(start, end);
     },
+
+    //traslazioni Card
     translateXMovie() {
       return -this.currentPageMovie * this.getElementWidth();
     },
     translateXSeries() {
       return -this.currentPageSeries * this.getElementWidth();
     },
+
+    //massimo scorrimento
     maxPages() {
       return this.filterMovies().length - 5;
     },
@@ -160,6 +176,7 @@ export default {
     },
   },
   methods: {
+    //prende le serie e i film dall' API e interrompe il loading
     getMoviesAndSeries() {
       this.loading = true;
       // prende i film
@@ -181,11 +198,14 @@ export default {
         this.loading = false;
       });
     },
+    //trasforma la query in cosa c'è scritto nel search
     submitSearch(newSearch) {
       this.search = newSearch;
       store.params.query = this.search;
       this.getMoviesAndSeries();
     },
+
+    //scorre film 
     scrollMovies(direction) {
       const totalMovies = this.filterMovies().length;
       const maxPages = totalMovies;
@@ -194,6 +214,7 @@ export default {
         Math.min(this.currentPageMovie + direction, maxPages)
       );
     },
+    //scorre serie
     scrollSeries(direction) {
       const totalSeries = this.filterSeries().length;
       const maxPagesSeries = totalSeries;
@@ -202,22 +223,29 @@ export default {
         Math.min(this.currentPageSeries + direction, maxPagesSeries)
       );
     },
+
+    //cerca film con filtro search
     filterMovies() {
       const searchMandS = this.search.toLowerCase();
       return this.store.movieList.filter((movie) => {
         return movie.title.toLowerCase().includes(searchMandS);
       });
     },
+
+    //cerca serie con filtro search
     filterSeries() {
       const searchMandS = this.search.toLowerCase();
       return this.store.serieList.filter((serie) => {
         return serie.name.toLowerCase().includes(searchMandS);
       });
     },
+
+    //definisce più o meno di quanto si deve spostare la translate in base a quanto è grande l'elemento
     getElementWidth() {
       return 200;
     },
    
+    //nasconde la pagina splash dopo 4 secondi
     hideSplash() {
       setTimeout(() => {
         this.showSplash = false;
