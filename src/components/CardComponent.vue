@@ -9,7 +9,7 @@
       <div class="flip-card-back p-3">
         <p class="card-text">Titolo: {{ title }}</p>
         <p>Titolo originale:{{ original_title }}</p>
-        <!-- <p>{{ original_language }}</p> -->
+        <p>{{ original_language }}</p>
         <img :src="getFlag" alt="img" />
         <p>voto: {{ vote_average }}</p>
         <div class="d-flex flex-row">
