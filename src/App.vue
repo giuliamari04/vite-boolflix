@@ -1,7 +1,7 @@
 <template>
   <!-- pagina splash iniziale-->
   <div v-if="showSplash" class="splash overflow-hidden ">
-    <img src="/public/image/netflix_newlogoanimation.gif" alt="gif">
+    <img src="/image/netflix_newlogoanimation.gif" alt="gif">
   </div>
   <!-- header con navbar -->
   <HeaderComponent @search-submitted="submitSearch" />
