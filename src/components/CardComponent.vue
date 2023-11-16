@@ -3,14 +3,14 @@
     <div class="flip-card-inner">
       <div class="flip-card-front">
         <div class="card bg-transparent text-light border-0">
-          <img :src="img" class="card-img-top" alt="img" />
+          <img :src="getImage" class="card-img-top" alt="img" />
         </div>
       </div>
       <div class="flip-card-back p-3">
         <p class="card-text">Titolo: {{ title }}</p>
         <p>Titolo originale:{{ original_title }}</p>
         <!-- <p>{{ original_language }}</p> -->
-        <img :src="original_language_img" alt="img" />
+        <img :src="getFlag" alt="img" />
         <p>voto: {{ vote_average }}</p>
         <div class="d-flex flex-row">
           <div v-for="i in 5" :key="i">
@@ -33,6 +33,7 @@ export default {
   name: "CardComponent",
   props: {
     title: String,
+    imgPath:String,
     img: String,
     original_title: String,
     original_language: String,
@@ -43,6 +44,14 @@ export default {
   data() {
     return {};
   },
+  computed:{
+    getImage(){
+      return this.img ? this.imgPath + this.img :'/public/image/default-placeholder.png';
+    },
+    getFlag(){
+      return this.original_language_img ? this.original_language_img :'/public/flags/en.png';
+    }
+  }
 };
 </script>
 

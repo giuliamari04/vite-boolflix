@@ -18,7 +18,8 @@
           :key="movie.id"
         >
           <CardComponent
-            :img="'https://image.tmdb.org/t/p/w300' + movie.poster_path"
+            :img="movie.poster_path"
+            :imgPath="'https://image.tmdb.org/t/p/w300'"
             :title="movie.title"
             :original_title="movie.original_title"
             :original_language="movie.original_language"
@@ -39,7 +40,8 @@
           :key="series.id"
         >
           <CardComponent
-            :img="'https://image.tmdb.org/t/p/w300' + series.poster_path"
+            :img="series.poster_path"
+            :imgPath="'https://image.tmdb.org/t/p/w300'"
             :title="series.name"
             :original_title="series.original_name"
             :original_language="series.original_language"
@@ -95,8 +97,6 @@ export default {
       this.search = newSearch;
       store.params.query = this.search;
       this.getMoviesAndSeries();
-      // this.filterMovies();
-      // this.filterSeries();
     },
     filterMovies() {
       const searchMandS = this.search.toLowerCase();
