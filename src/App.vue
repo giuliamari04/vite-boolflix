@@ -203,6 +203,8 @@ export default {
       this.search = newSearch;
       store.params.query = this.search;
       this.getMoviesAndSeries();
+      this.currentPageMovie = 0;
+      this.currentPageSeries= 0;
     },
 
     //scorre film 
