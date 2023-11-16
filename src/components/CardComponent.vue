@@ -1,5 +1,5 @@
 <template>
-  <div class="flip-card">
+ <div class="flip-card" @click="toggleOverview">
     <div class="flip-card-inner">
       <div class="flip-card-front">
         <div class="card bg-transparent text-light border-0">
@@ -9,7 +9,7 @@
       <div class="flip-card-back p-3">
         <p class="card-text">Titolo: {{ title }}</p>
         <p>Titolo originale:{{ original_title }}</p>
-        <!-- <p>{{ original_language }}</p> -->
+        <p>{{ original_language }}</p>
         <img :src="getFlag" alt="img" />
         <p>voto: {{ vote_average }}</p>
         <div class="d-flex flex-row">
@@ -23,6 +23,7 @@
             ></i>
           </div>
         </div>
+        <button class="btn btn-link mt-3">Mostra trama</button>
       </div>
     </div>
   </div>
@@ -40,9 +41,17 @@ export default {
     vote_average: Number,
     original_language_img: String,
     vote_star: Number,
+    overview: String,
   },
   data() {
-    return {};
+    return {
+      showOverview: false,
+    };
+  },
+  methods: {
+    toggleOverview() {
+   this.$emit('toggle-overview');
+  },
   },
   computed:{
     getImage(){
@@ -50,12 +59,14 @@ export default {
     },
     getFlag(){
       return this.original_language_img ? this.original_language_img :'/public/flags/en.png';
-    }
+    },
+    
   }
 };
 </script>
 
 <style lang="scss" scoped>
+@use '../assets/styles/partials/variables' as *;
 .card {
   cursor: pointer;
   transition: 1s;
@@ -109,4 +120,5 @@ export default {
   text-align: left;
  font-size: small;
 }
+
 </style>
