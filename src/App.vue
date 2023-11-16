@@ -3,10 +3,11 @@
   @search-submitted="submitSearch"
   />
   <main>
-    <div class="my-vh" :class="{ 'd-none': search !== '', 'd-block': search === '' }">
+    <div class="my-vh front" :class="{ 'd-none': search !== '', 'd-block': search === '' }">
       <h2>Cerca un film o una serie Tv nella barra di ricerca </h2>
     </div>
-    <div class="" :class="{ 'd-none': search === '', 'd-block': search !== '' }">
+    <LoaderComponent v-if="loading"/>
+    <div v-if="!loading" :class="{ 'd-none': search === '', 'd-block': search !== '' }">
      
 
     <section id="movie" class="container">
@@ -69,12 +70,14 @@ import axios from "axios";
 import { store } from "./components/data/store.js";
 import CardComponent from "./components/CardComponent.vue";
 import HeaderComponent from "./components/HeaderComponent.vue";
+import LoaderComponent from "./components/LoaderComponent.vue";
 
 export default {
   name: "App",
   components: {
     HeaderComponent,
     CardComponent,
+    LoaderComponent,
   },
   data() {
     return {
@@ -84,6 +87,7 @@ export default {
       currentPageMovie: 0,
       currentPageSeries: 0,
       elementsPerPage: 6,
+      loading:true,
     };
   },
   computed: {
@@ -112,6 +116,7 @@ export default {
   },
   methods: {
     getMoviesAndSeries() {
+      this.loading=true;
       // prende i film
       const movieurl = store.apriUrl + this.store.endPoint.movie;
       const params = {
@@ -121,12 +126,14 @@ export default {
       axios.get(movieurl, { params }).then((res) => {
         console.log(res.data.results);
         this.store.movieList = res.data.results;
+        this.loading = false;
       });
       // prende le serie
       const serieurl = store.apriUrl + this.store.endPoint.series;
       axios.get(serieurl, { params }).then((res) => {
         console.log(res.data.results);
         this.store.serieList = res.data.results;
+        this.loading = false;
       });
     },
     submitSearch(newSearch){
