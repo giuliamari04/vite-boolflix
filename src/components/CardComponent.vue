@@ -23,10 +23,17 @@
             ></i>
           </div>
         </div>
-        <button class="btn btn-link mt-3">Mostra trama</button>
       </div>
     </div>
   </div>
+  <div v-if="showOverview" class="overview-overlay">
+    <div class="overview-box d-flex justify-content-end flex-column ">
+      <button class="btn text-light border-0   d-flex justify-content-end" @click="toggleOverview"><i class="fa-solid fa-xmark"></i></button>
+      <h5>Overview:</h5>
+      <p class="overview-text">{{ overview }}</p>
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -50,8 +57,8 @@ export default {
   },
   methods: {
     toggleOverview() {
-   this.$emit('toggle-overview');
-  },
+      this.showOverview = !this.showOverview;
+    },
   },
   computed:{
     getImage(){
@@ -70,6 +77,7 @@ export default {
 .card {
   cursor: pointer;
   transition: 1s;
+  
   .card-img-top {
     height: 40vh;
   }
@@ -92,6 +100,8 @@ export default {
 
 .flip-card:hover .flip-card-inner {
   transform: rotateY(180deg);
+  
+  
 }
 
 .flip-card-front,
@@ -99,17 +109,21 @@ export default {
   position: absolute;
   width: 100%;
   height: 93%;
+  margin-top: 5px;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+
+ 
 }
 
 .flip-card-front {
   background-color: transparent;
+ 
 }
 
 .flip-card-back {
   background-color: rgba(0, 0, 0, 0.486);
-  box-shadow: 0px 0px 8px 0px black;
+  box-shadow: 0px 0px 5px 0px white;
   color: white;
   transform: rotateY(180deg);
   display: flex;
@@ -119,6 +133,34 @@ export default {
   justify-content: center;
   text-align: left;
  font-size: small;
+
+ 
+}
+
+.overview-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.overview-box {
+  background-color:black;
+  padding: 20px;
+  border-radius: 8px;
+  width: 70%;
+  max-width: 800px;
+  overflow-y: auto;
+}
+
+.overview-text {
+  font-size: small;
 }
 
 </style>

@@ -46,14 +46,9 @@
                 :vote_average="movie.vote_average"
                 :vote_star="Math.ceil(movie.vote_average / 2)"
                 :overview="movie.overview"
-                @toggle-overview="toggleOverview(movie.overview)"
+               
               />
-              <div v-if="showOverview" class="overview-overlay" @click="toggleOverview">
-      <div class="overview-box">
-        <button class="btn btn-link">Chiudi</button>
-        <p class="overview-text">{{ movie.overview  }}</p>
-      </div>
-    </div>
+              
             </div>
           </div>
         </div>
@@ -98,12 +93,7 @@
                 :vote_star="Math.ceil(series.vote_average / 2)"
                 :overview="series.overview"
               />
-              <div v-if="showOverview" class="overview-overlay" @click="toggleOverview">
-      <div class="overview-box">
-        <button class="btn btn-link">Chiudi</button>
-        <p class="overview-text">{{series.overview  }}</p>
-      </div>
-    </div>
+             
             </div>
           </div>
         </div>
@@ -142,8 +132,6 @@ export default {
       currentPageSeries: 0,
       elementsPerPage: 6,
       loading: true,
-      showOverview: false,
-      selectedOverview: '',
       showSplash: true,
     };
   },
@@ -229,9 +217,7 @@ export default {
     getElementWidth() {
       return 200;
     },
-    toggleOverview() {
-      this.showOverview = !this.showOverview;
-    },
+   
     hideSplash() {
       setTimeout(() => {
         this.showSplash = false;
@@ -305,29 +291,5 @@ img{
   right: -55px;
   top: 40px;
 }
-.overview-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
 
-.overview-box {
-  background-color:black;
-  padding: 20px;
-  border-radius: 8px;
-  width: 70%;
-  max-width: 800px;
-  overflow-y: auto;
-}
-
-.overview-text {
-  font-size: small;
-}
 </style>
