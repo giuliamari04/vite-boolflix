@@ -6,14 +6,16 @@
     <div class="my-vh" :class="{ 'd-none': search !== '', 'd-block': search === '' }">
       <h2>Cerca un film o una serie Tv nella barra di ricerca </h2>
     </div>
-    <div :class="{ 'd-none': search === '', 'd-block': search !== '' }">
+    <div class="" :class="{ 'd-none': search === '', 'd-block': search !== '' }">
      
 
     <section id="movie" class="container">
       <h2>Movie</h2>
-      <div class="row flex-nowrap  overflow-x-scroll overflow-y-hidden">
+    <button class="btn prev-btn" @click="scrollMovies(-1)" :disabled="currentPageMovie === 0"><i class="fa-solid fa-chevron-right fa-rotate-180"></i></button>
+    <div class="row overflow-hidden flex-nowrap">
+      <div class="movie-list" :style="{ transform: `translateX(${translateXMovie}px)` }">
         <div
-          class="col-12 col-md-4 col-lg-2"
+          class="col-12 col-md-4 col-lg-2 px-1"
           v-for="(movie, index) in filterMovies()"
           :key="movie.id"
         >
@@ -29,13 +31,18 @@
           />
         </div>
       </div>
+       
+      </div> 
+      <button class="btn next-btn" @click="scrollMovies(1)" :disabled="currentPageMovie === maxPages"><i class="fa-solid fa-chevron-right"></i></button>
     </section>
 
     <section id="serie" class="container">
       <h2>Series</h2>
-      <div class="row flex-nowrap  overflow-x-scroll overflow-y-hidden ">
+    <button class="btn prev-btn" @click="scrollSeries(-1)" :disabled="currentPageSeries === 0"><i class="fa-solid fa-chevron-right fa-rotate-180"></i></button>
+    <div class="row overflow-hidden flex-nowrap">
+      <div class="movie-list" :style="{ transform: `translateX(${translateXSeries}px)` }">
         <div
-          class="col-12 col-md-4 col-lg-2"
+          class="col-12 col-md-4 col-lg-2 px-1"
           v-for="(series, index) in filterSeries()"
           :key="series.id"
         >
@@ -50,7 +57,8 @@
             :vote_star="Math.ceil(series.vote_average / 2)"
           />
         </div>
-      </div>
+      </div></div>
+      <button class="btn next-btn" @click="scrollSeries(1)" :disabled="currentPageSeries === maxPagesSeries"><i class="fa-solid fa-chevron-right"></i></button>
     </section>
   </div>
   </main>
@@ -71,8 +79,36 @@ export default {
   data() {
     return {
       store,
-      search:''
+      search:'',
+      currentPage: 0,
+      currentPageMovie: 0,
+      currentPageSeries: 0,
+      elementsPerPage: 6,
     };
+  },
+  computed: {
+    visibleMovies() {
+      const start = this.currentPage * this.elementsPerPage;
+      const end = start + this.elementsPerPage;
+      return this.filterMovies().slice(start, end);
+    },
+    visibleseries() {
+      const start = this.currentPage * this.elementsPerPage;
+      const end = start + this.elementsPerPage;
+      return this.filterSeries().slice(start, end);
+    },
+    translateXMovie() {
+      return -this.currentPageMovie * this.getElementWidth();
+    },
+    translateXSeries() {
+      return -this.currentPageSeries * this.getElementWidth();
+    },
+    maxPages() {
+      return this.filterMovies().length - 5;
+    },
+    maxPagesSeries() {
+      return this.filterSeries().length -5;
+    },
   },
   methods: {
     getMoviesAndSeries() {
@@ -98,6 +134,16 @@ export default {
       store.params.query = this.search;
       this.getMoviesAndSeries();
     },
+    scrollMovies(direction) {
+      const totalMovies = this.filterMovies().length;
+      const maxPages =totalMovies ;
+      this.currentPageMovie = Math.max(0, Math.min(this.currentPageMovie + direction, maxPages));
+    },
+    scrollSeries(direction) {
+      const totalSeries = this.filterSeries().length;
+      const maxPagesSeries =totalSeries ;
+      this.currentPageSeries = Math.max(0, Math.min(this.currentPageSeries + direction, maxPagesSeries));
+    },
     filterMovies() {
       const searchMandS = this.search.toLowerCase();
       return this.store.movieList.filter((movie) => {
@@ -110,7 +156,9 @@ export default {
         return serie.name.toLowerCase().includes(searchMandS);
       });
     },
-   
+    getElementWidth() {
+      return 200; 
+    },
   },
   created() {
     this.getMoviesAndSeries();
@@ -122,5 +170,47 @@ export default {
 <style lang="scss" scoped>
 .my-vh{
   height: 90vh;
+}
+.container {
+  position: relative;
+}
+
+.scroll-container {
+  display: flex;
+  align-items: center;
+ 
+}
+.movie-list{
+  transition: 0.5s;
+}
+.prev-btn,
+.next-btn {
+  width: 50px;
+  height:290px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.575);
+  cursor: pointer;
+  position: absolute;
+  z-index: 3000;
+  opacity: 0;
+}
+
+.prev-btn:hover{
+  opacity: 1;
+}
+.next-btn:hover{
+  opacity: 1;
+}
+
+.movie-list {
+  display: flex;
+}
+
+.prev-btn{
+  left: -55px;
+}
+.next-btn{
+  right: -55px;
+  top:40px;
 }
 </style>
