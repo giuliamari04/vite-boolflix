@@ -22,7 +22,8 @@
         },
         methods: {
     submitSearch() {
-      this.$emit('search-submitted', this.search);
+        this.$emit('search-submitted', this.search);
+        console.log(this.$emit);
     },
   },
     }

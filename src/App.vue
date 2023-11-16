@@ -3,6 +3,12 @@
   @search-submitted="submitSearch"
   />
   <main>
+    <div class="my-vh" :class="{ 'd-none': search !== '', 'd-block': search === '' }">
+      <h2>Cerca un film o una serie Tv nella barra di ricerca </h2>
+    </div>
+    <div :class="{ 'd-none': search === '', 'd-block': search !== '' }">
+     
+
     <section id="movie" class="container">
       <h2>Movie</h2>
       <div class="row flex-nowrap  overflow-x-scroll overflow-y-hidden">
@@ -44,6 +50,7 @@
         </div>
       </div>
     </section>
+  </div>
   </main>
 </template>
 
@@ -69,21 +76,27 @@ export default {
     getMoviesAndSeries() {
       // prende i film
       const movieurl = store.apriUrl + this.store.endPoint.movie;
-      axios.get(movieurl, { params: this.store.params }).then((res) => {
+      const params = {
+      api_key: this.store.params.api_key,
+      query: this.search,
+    };
+      axios.get(movieurl, { params }).then((res) => {
         console.log(res.data.results);
         this.store.movieList = res.data.results;
       });
       // prende le serie
       const serieurl = store.apriUrl + this.store.endPoint.series;
-      axios.get(serieurl, { params: this.store.params }).then((res) => {
+      axios.get(serieurl, { params }).then((res) => {
         console.log(res.data.results);
         this.store.serieList = res.data.results;
       });
     },
     submitSearch(newSearch){
       this.search = newSearch;
-      this.filterMovies();
-      this.filterSeries();
+      store.params.query = this.search;
+      this.getMoviesAndSeries();
+      // this.filterMovies();
+      // this.filterSeries();
     },
     filterMovies() {
       const searchMandS = this.search.toLowerCase();
@@ -106,4 +119,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.my-vh{
+  height: 90vh;
+}
+</style>
