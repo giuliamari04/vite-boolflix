@@ -19,7 +19,7 @@
                 { 'fa-regular': i > vote_star, 'fa-solid': i <= vote_star },
                 'fa fa-star',
               ]"
-              class="fa-star"
+             
             ></i>
           </div>
         </div>
