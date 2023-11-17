@@ -6,6 +6,9 @@ export const store = reactive({
    endPoint:{
     movie:"search/movie",
     series:"search/tv",
+    trending:'trending/movie/week',
+    movieCast:'movie/',
+    seriesTopRated:'tv/top_rated',
    },
    params:{
     api_key:"d170466bdf6c45702dc63dcd9b94ee73",
@@ -16,4 +19,6 @@ export const store = reactive({
    loading:true,
    movieList:[],
    serieList:[],
+   moviepopularList:[],
+   seriestopratedList:[],
 });

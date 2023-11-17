@@ -1,24 +1,97 @@
 <template>
   <!-- pagina splash iniziale-->
-  <div v-if="showSplash" class="splash overflow-hidden ">
-    <img src="/image/netflix_newlogoanimation.gif" alt="gif">
+  <div v-if="showSplash" class="splash overflow-hidden">
+    <img src="/image/netflix_newlogoanimation.gif" alt="gif" />
   </div>
   <!-- header con navbar -->
   <HeaderComponent @search-submitted="submitSearch" />
 
-
-  <main>
+  <main v-if="!showSplash">
     <!-- div iniziale apertura sito -->
-    <div class="my-vh front" :class="{ 'd-none': search !== '', 'd-block': search === '' }">
-      <h2>Cerca un film o una serie Tv nella barra di ricerca</h2>
+    <div
+      class="my-vh front"
+      :class="{ 'd-none': search !== '', 'd-block': search === '' }"
+    >
+      <div class="container-video" v-if="search === ''">
+        <video ref="myVideo" class="video" autoplay loop :controls="!isMuted">
+  <source
+    src="/public/video/Avatar_ The Last Airbender _ Official Teaser _ Netflix.mp4"
+    type="video/mp4"
+  />
+</video>
+<button @click="toggleMute" class="btn btn-volume rounded-0 py-2">volume <i class="px-3 fa-solid" :class="{'fa-volume-high': !isMuted, 'fa-volume-xmark': isMuted}"  ></i></button>
+      </div>
+
+      <section id="movietending" class="container">
+        <h2>Trending Movie della settimana</h2>
+
+        <!-- div row lista movie -->
+        <div class="row overflow-scroll overflow-y-hidden">
+          <div class="movie-list">
+            <!-- ciclo for che stampa singole card -->
+            <div
+              class="col-12 col-md-4 col-lg-2 px-1"
+              v-for="(movie, index) in this.store.moviepopularList"
+              :key="movie.id"
+            >
+              <CardComponent
+                :img="movie.poster_path"
+                :imgPath="'https://image.tmdb.org/t/p/w300'"
+                :title="movie.title"
+                :original_title="movie.original_title"
+                :original_language="movie.original_language"
+                :original_language_img="
+                  '/flags/' + movie.original_language + '.png'
+                "
+                :vote_average="movie.vote_average"
+                :vote_star="Math.ceil(movie.vote_average / 2)"
+                :overview="movie.overview"
+                :id="movie.id"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="seriesToprated" class="container">
+        <h2>Serie Top Rated</h2>
+
+        <!-- div row lista movie -->
+        <div class="row overflow-scroll overflow-y-hidden">
+          <div class="movie-list">
+            <!-- ciclo for che stampa singole card -->
+            <div
+              class="col-12 col-md-4 col-lg-2 px-1"
+              v-for="(movie, index) in this.store.seriestopratedList"
+              :key="movie.id"
+            >
+              <CardComponent
+                :img="movie.poster_path"
+                :imgPath="'https://image.tmdb.org/t/p/w300'"
+                :title="movie.title"
+                :original_title="movie.original_title"
+                :original_language="movie.original_language"
+                :original_language_img="
+                  '/flags/' + movie.original_language + '.png'
+                "
+                :vote_average="movie.vote_average"
+                :vote_star="Math.ceil(movie.vote_average / 2)"
+                :overview="movie.overview"
+                :id="movie.id"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
 
     <!-- loader caricamenti Film e Serie -->
     <LoaderComponent v-if="loading" />
 
     <!-- div lista serie e movie -->
-    <div v-if="!loading" :class="{ 'd-none': search === '', 'd-block': search !== '' }">
-
+    <div
+      v-if="!loading"
+      :class="{ 'd-none': search === '', 'd-block': search !== '' }"
+    >
       <!-- SECTION 1 || MOVIE -->
       <section id="movie" class="container">
         <h2>Movie</h2>
@@ -33,8 +106,10 @@
 
         <!-- div row lista movie -->
         <div class="row overflow-hidden flex-nowrap">
-          <div class="movie-list" :style="{ transform: `translateX(${translateXMovie}px)` }">
-
+          <div
+            class="movie-list"
+            :style="{ transform: `translateX(${translateXMovie}px)` }"
+          >
             <!-- ciclo for che stampa singole card -->
             <div
               class="col-12 col-md-4 col-lg-2 px-1"
@@ -53,9 +128,8 @@
                 :vote_average="movie.vote_average"
                 :vote_star="Math.ceil(movie.vote_average / 2)"
                 :overview="movie.overview"
-               
+                :id="movie.id"
               />
-              
             </div>
           </div>
         </div>
@@ -83,8 +157,11 @@
 
         <!-- div row lista serie -->
         <div class="row overflow-hidden flex-nowrap">
-          <div class="movie-list" :style="{ transform: `translateX(${translateXSeries}px)` }">
-           <!-- ciclo for che stampa singole card -->
+          <div
+            class="movie-list"
+            :style="{ transform: `translateX(${translateXSeries}px)` }"
+          >
+            <!-- ciclo for che stampa singole card -->
             <div
               class="col-12 col-md-4 col-lg-2 px-1"
               v-for="(series, index) in filterSeries()"
@@ -103,11 +180,10 @@
                 :vote_star="Math.ceil(series.vote_average / 2)"
                 :overview="series.overview"
               />
-             
             </div>
           </div>
         </div>
-          <!-- button slider card successiva -->
+        <!-- button slider card successiva -->
         <button
           class="btn next-btn"
           @click="scrollSeries(1)"
@@ -143,7 +219,20 @@ export default {
       elementsPerPage: 6,
       loading: true,
       showSplash: true,
+      isMuted:false,
     };
+  },
+  // Quando il valore di search cambia
+  watch: {
+    search(newSearch) {
+      if (newSearch !== "") {
+        // Se search non è vuoto, ferma il video
+        this.$refs.myVideo.pause();
+      } else {
+        // Altrimenti, riproduci il video
+        this.$refs.myVideo.play();
+      }
+    },
   },
   computed: {
     //porzione di un elenco di film in base alla pagina corrente e al numero di elementi da visualizzare per pagina
@@ -197,6 +286,30 @@ export default {
         this.store.serieList = res.data.results;
         this.loading = false;
       });
+
+      // film di tendenza
+      // https://api.themoviedb.org/3/trending/movie/${timeWindow}?api_key=${apiKey}&page=1`;
+      const moviePopularUrl = store.apriUrl + this.store.endPoint.trending;
+      const paramsPopular = {
+        api_key: this.store.params.api_key,
+      };
+      axios.get(moviePopularUrl, { params: paramsPopular }).then((res) => {
+        console.log(res.data.results);
+        this.store.moviepopularList = res.data.results;
+      });
+
+      // serie di tendenza
+      // https://api.themoviedb.org/3/tv/top_rated
+      const seriestoratedUrl =
+        store.apriUrl + this.store.endPoint.seriesTopRated;
+      const paramsTrending = {
+        api_key: this.store.params.api_key,
+      };
+      axios.get(seriestoratedUrl, { params: paramsTrending }).then((res) => {
+        console.log(res.data.results);
+        this.store.seriestopratedList = res.data.results;
+      });
+
     },
     //trasforma la query in cosa c'è scritto nel search
     submitSearch(newSearch) {
@@ -204,10 +317,10 @@ export default {
       store.params.query = this.search;
       this.getMoviesAndSeries();
       this.currentPageMovie = 0;
-      this.currentPageSeries= 0;
+      this.currentPageSeries = 0;
     },
 
-    //scorre film 
+    //scorre film
     scrollMovies(direction) {
       const totalMovies = this.filterMovies().length;
       const maxPages = totalMovies;
@@ -246,37 +359,48 @@ export default {
     getElementWidth() {
       return 200;
     },
-   
+
     //nasconde la pagina splash dopo 4 secondi
     hideSplash() {
       setTimeout(() => {
         this.showSplash = false;
       }, 4000);
     },
+    toggleMute() {
+    // Ottieni il riferimento all'elemento video utilizzando $refs
+    const videoElement = this.$refs.myVideo;
 
-    
+    // Toggle mute status
+    this.isMuted = !this.isMuted;
+
+    // Set the video's mute property
+    if (videoElement) {
+      videoElement.muted = this.isMuted;
+    }
+  },
+   
   },
   created() {
     this.getMoviesAndSeries();
-     this.hideSplash();
+    this.hideSplash();
   },
- };
+};
 </script>
 
 <style lang="scss" scoped>
-.splash{
-position: absolute;
-z-index: 10000;
-top: 0;
-left: 0;
-right: 0;
-bottom: 0;
-img{
-  width: 100%;
-  height: 100vh;
-  overflow-y: hidden;
+.splash {
+  position: absolute;
+  z-index: 10000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  img {
+    width: 100%;
+    height: 100vh;
+    overflow-y: hidden;
+  }
 }
-} 
 .my-vh {
   height: 90vh;
 }
@@ -284,10 +408,6 @@ img{
   position: relative;
 }
 
-.scroll-container {
-  display: flex;
-  align-items: center;
-}
 .movie-list {
   transition: 0.5s;
 }
@@ -321,5 +441,20 @@ img{
   right: -55px;
   top: 40px;
 }
-
+.container-video {
+  height: 500px;
+  overflow: hidden;
+}
+.video {
+  width: 100%;
+  margin-top: -200px;
+}
+.btn-volume{
+  position: absolute;
+  left: 0;
+  bottom: 200px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 200px;
+}
 </style>

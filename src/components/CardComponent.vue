@@ -1,5 +1,5 @@
 <template>
- <div class="flip-card" @click="toggleOverview">
+  <div class="flip-card" @click="toggleOverview">
     <div class="flip-card-inner">
       <div class="flip-card-front">
         <div class="card bg-transparent text-light border-0">
@@ -7,8 +7,14 @@
         </div>
       </div>
       <div class="flip-card-back p-3">
-        <p class="card-text">Titolo: {{ title }}</p>
-        <p>Titolo originale:{{ original_title }}</p>
+        <p class="card-text d-flex justify-content-start">
+          Titolo: <br />
+          {{ title }}
+        </p>
+        <p>
+          Titolo originale: <br />
+          {{ original_title }}
+        </p>
         <!-- <p>{{ original_language }}</p> -->
         <img :src="getFlag" alt="img" />
         <p>voto: {{ vote_average }}</p>
@@ -19,7 +25,6 @@
                 { 'fa-regular': i > vote_star, 'fa-solid': i <= vote_star },
                 'fa fa-star',
               ]"
-             
             ></i>
           </div>
         </div>
@@ -27,21 +32,27 @@
     </div>
   </div>
   <div v-if="showOverview" class="overview-overlay">
-    <div class="overview-box d-flex justify-content-end flex-column ">
-      <button class="btn text-light border-0   d-flex justify-content-end" @click="toggleOverview"><i class="fa-solid fa-xmark"></i></button>
+    <div class="overview-box d-flex justify-content-end flex-column">
+      <button
+        class="btn text-light border-0 d-flex justify-content-end"
+        @click="toggleOverview"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
       <h5>Overview:</h5>
       <p class="overview-text">{{ overview }}</p>
     </div>
   </div>
-
 </template>
 
 <script>
+import axios from "axios";
+import { store } from "../components/data/store.js";
 export default {
   name: "CardComponent",
   props: {
     title: String,
-    imgPath:String,
+    imgPath: String,
     img: String,
     original_title: String,
     original_language: String,
@@ -53,6 +64,7 @@ export default {
   data() {
     return {
       showOverview: false,
+      store,
     };
   },
   methods: {
@@ -60,24 +72,28 @@ export default {
       this.showOverview = !this.showOverview;
     },
   },
-  computed:{
-    getImage(){
-      return this.img ? this.imgPath + this.img :'/public/image/default-placeholder.png';
+  computed: {
+    getImage() {
+      return this.img
+        ? this.imgPath + this.img
+        : "/public/image/default-placeholder.png";
     },
-    getFlag(){
-      return this.original_language_img ? this.original_language_img :'/public/flags/en.png';
+    getFlag() {
+      return this.original_language_img
+        ? this.original_language_img
+        : "/public/flags/en.png";
     },
     
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@use '../assets/styles/partials/variables' as *;
+@use "../assets/styles/partials/variables" as *;
 .card {
   cursor: pointer;
   transition: 1s;
-  
+
   .card-img-top {
     height: 40vh;
   }
@@ -90,7 +106,7 @@ export default {
 }
 
 .flip-card-inner {
-  position: relative;
+  //position: relative;
   width: 100%;
   height: 100%;
   text-align: center;
@@ -100,8 +116,6 @@ export default {
 
 .flip-card:hover .flip-card-inner {
   transform: rotateY(180deg);
-  
-  
 }
 
 .flip-card-front,
@@ -112,13 +126,10 @@ export default {
   margin-top: 5px;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-
- 
 }
 
 .flip-card-front {
   background-color: transparent;
- 
 }
 
 .flip-card-back {
@@ -132,9 +143,7 @@ export default {
   align-content: center;
   justify-content: center;
   text-align: left;
- font-size: small;
-
- 
+  font-size: small;
 }
 
 .overview-overlay {
@@ -151,7 +160,7 @@ export default {
 }
 
 .overview-box {
-  background-color:black;
+  background-color: black;
   padding: 20px;
   border-radius: 8px;
   width: 70%;
@@ -162,5 +171,4 @@ export default {
 .overview-text {
   font-size: small;
 }
-
 </style>
