@@ -35,6 +35,7 @@
 nav{
   background-color: $blackBg;
   height: 70px;
+  z-index: 8000;
   .navbar-brand{
     color:$redTitle !important;
     font-size: 2em;
