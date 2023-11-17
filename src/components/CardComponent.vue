@@ -31,18 +31,7 @@
       </div>
     </div>
   </div>
-  <div v-if="showOverview" class="overview-overlay">
-    <div class="overview-box d-flex justify-content-end flex-column">
-      <button
-        class="btn text-light border-0 d-flex justify-content-end"
-        @click="toggleOverview"
-      >
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <h5>Overview:</h5>
-      <p class="overview-text">{{ overview }}</p>
-    </div>
-  </div>
+ 
 </template>
 
 <script>
@@ -63,13 +52,13 @@ export default {
   },
   data() {
     return {
-      showOverview: false,
       store,
     };
   },
   methods: {
     toggleOverview() {
-      this.showOverview = !this.showOverview;
+      this.$emit('toggleOverview',this.overview);
+      
     },
   },
   computed: {
@@ -146,29 +135,5 @@ export default {
   font-size: small;
 }
 
-.overview-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-}
 
-.overview-box {
-  background-color: black;
-  padding: 20px;
-  border-radius: 8px;
-  width: 70%;
-  max-width: 800px;
-  overflow-y: auto;
-}
-
-.overview-text {
-  font-size: small;
-}
 </style>

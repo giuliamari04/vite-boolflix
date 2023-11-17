@@ -14,15 +14,21 @@
     >
       <div class="container-video" v-if="search === ''">
         <video ref="myVideo" class="video" autoplay loop :controls="!isMuted">
-  <source
-    src="/public/video/Avatar_ The Last Airbender _ Official Teaser _ Netflix.mp4"
-    type="video/mp4"
-  />
-</video>
-<button @click="toggleMute" class="btn btn-volume rounded-0 py-2">volume <i class="px-3 fa-solid" :class="{'fa-volume-high': !isMuted, 'fa-volume-xmark': isMuted}"  ></i></button>
+          <source
+            src="/public/video/Avatar_ The Last Airbender _ Official Teaser _ Netflix.mp4"
+            type="video/mp4"
+          />
+        </video>
+        <button @click="toggleMute" class="btn btn-volume rounded-0 py-2">
+          volume
+          <i
+            class="px-3 fa-solid"
+            :class="{ 'fa-volume-high': !isMuted, 'fa-volume-xmark': isMuted }"
+          ></i>
+        </button>
       </div>
 
-      <section id="movietending" class="container">
+      <section id="movietending" class="container py-3">
         <h2>Trending Movie della settimana</h2>
 
         <!-- div row lista movie -->
@@ -47,12 +53,14 @@
                 :vote_star="Math.ceil(movie.vote_average / 2)"
                 :overview="movie.overview"
                 :id="movie.id"
+                @toggleOverview="handleToggleOverview"
+                :overviewText="overviewText"
               />
             </div>
           </div>
         </div>
       </section>
-      <section id="seriesToprated" class="container">
+      <section id="seriesToprated" class="container py-3">
         <h2>Serie Top Rated</h2>
 
         <!-- div row lista movie -->
@@ -77,7 +85,24 @@
                 :vote_star="Math.ceil(movie.vote_average / 2)"
                 :overview="movie.overview"
                 :id="movie.id"
+                @toggleOverview="handleToggleOverview"
+                :overviewText="overviewText"
               />
+            </div>
+          </div>
+        </div>
+        <div class=" text-light ">
+          <div v-if="showOverview" class="p-4 overview-overlay-trend">
+            <div class="d-flex justify-content-end flex-column overview-box">
+              <button
+                class="btn text-light border-0 d-flex justify-content-end"
+                @click="handleToggleOverview"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+              <h5>Overview:</h5>
+              <!-- Use the correct variable name here -->
+              <p class="overview-text">{{ this.overviewText }}</p>
             </div>
           </div>
         </div>
@@ -129,7 +154,24 @@
                 :vote_star="Math.ceil(movie.vote_average / 2)"
                 :overview="movie.overview"
                 :id="movie.id"
+                @toggleOverview="handleToggleOverview"
+                :overviewText="overviewText"
               />
+            </div>
+          </div>
+        </div>
+        <div class=" text-light ">
+          <div v-if="showOverview" class="p-4 overview-overlay">
+            <div class="d-flex justify-content-end flex-column overview-box">
+              <button
+                class="btn text-light border-0 d-flex justify-content-end"
+                @click="handleToggleOverview"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+              <h5>Overview:</h5>
+              <!-- Use the correct variable name here -->
+              <p class="overview-text">{{ this.overviewText }}</p>
             </div>
           </div>
         </div>
@@ -179,6 +221,8 @@
                 :vote_average="series.vote_average"
                 :vote_star="Math.ceil(series.vote_average / 2)"
                 :overview="series.overview"
+                @toggleOverview="handleToggleOverview"
+                :overviewText="overviewText"
               />
             </div>
           </div>
@@ -219,7 +263,9 @@ export default {
       elementsPerPage: 6,
       loading: true,
       showSplash: true,
-      isMuted:false,
+      isMuted: false,
+      showOverview: false,
+      overviewText: "",
     };
   },
   // Quando il valore di search cambia
@@ -265,6 +311,11 @@ export default {
     },
   },
   methods: {
+    handleToggleOverview(overview) {
+      console.log("Overview del film:", overview);
+      this.overviewText = overview; 
+      this.showOverview = !this.showOverview;
+    },
     //prende le serie e i film dall' API e interrompe il loading
     getMoviesAndSeries() {
       this.loading = true;
@@ -309,7 +360,6 @@ export default {
         console.log(res.data.results);
         this.store.seriestopratedList = res.data.results;
       });
-
     },
     //trasforma la query in cosa c'è scritto nel search
     submitSearch(newSearch) {
@@ -319,7 +369,9 @@ export default {
       this.currentPageMovie = 0;
       this.currentPageSeries = 0;
     },
-
+    toggleOverview() {
+     
+    },
     //scorre film
     scrollMovies(direction) {
       const totalMovies = this.filterMovies().length;
@@ -367,18 +419,17 @@ export default {
       }, 4000);
     },
     toggleMute() {
-    // Ottieni il riferimento all'elemento video utilizzando $refs
-    const videoElement = this.$refs.myVideo;
+      // Ottieni il riferimento all'elemento video utilizzando $refs
+      const videoElement = this.$refs.myVideo;
 
-    // Toggle mute status
-    this.isMuted = !this.isMuted;
+      // Toggle mute status
+      this.isMuted = !this.isMuted;
 
-    // Set the video's mute property
-    if (videoElement) {
-      videoElement.muted = this.isMuted;
-    }
-  },
-   
+      // Set the video's mute property
+      if (videoElement) {
+        videoElement.muted = this.isMuted;
+      }
+    },
   },
   created() {
     this.getMoviesAndSeries();
@@ -407,7 +458,6 @@ export default {
 .container {
   position: relative;
 }
-
 .movie-list {
   transition: 0.5s;
 }
@@ -449,12 +499,49 @@ export default {
   width: 100%;
   margin-top: -200px;
 }
-.btn-volume{
+.btn-volume {
   position: absolute;
   left: 0;
   bottom: 200px;
   color: white;
   background-color: rgba(0, 0, 0, 0.5);
   width: 200px;
+}
+
+.overview-overlay{
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3000; 
+  position: absolute;
+  top:-100px;
+  left:0;
+  right: 0;
+  bottom: -350px;
+  
+}
+.overview-box {
+  background-color: black;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;
+  overflow-y: auto;
+  margin-left: 30%;
+  margin-top: 20%;
+  padding: 20px;
+ 
+ 
+ 
+ 
+}
+.overview-text {
+  font-size: small;
+}
+.overview-overlay-trend{
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3000; 
+  position: absolute;
+  top:-46vh;
+  left:0;
+  right: 0;
+  bottom: 0;
 }
 </style>
