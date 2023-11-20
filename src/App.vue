@@ -15,7 +15,7 @@
       <div class="container-video" v-if="search === ''">
         <video ref="myVideo" class="video" autoplay loop :controls="!isMuted">
           <source
-            src="/public/video/Avatar_ The Last Airbender _ Official Teaser _ Netflix.mp4"
+            src="/video/Avatar_ The Last Airbender _ Official Teaser _ Netflix.mp4"
             type="video/mp4"
           />
         </video>
